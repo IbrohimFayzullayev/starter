@@ -75,6 +75,21 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 //// FUNCTIONS
 
+const ekrangaChiqarish = function (obj) {
+  containerMovements.innerHTML = '';
+  obj.movements.forEach(function (val, key) {
+    let tekshir = val > 0 ? 'deposit' : 'withdrawal';
+    let qalay = `<div class="movements__row">
+    <div class="movements__type movements__type--${tekshir}">${
+      key + 1
+    } ${tekshir}</div>
+    <div class="movements__date">3 days ago</div>
+    <div class="movements__value">${val}€</div>
+  </div>`;
+    containerMovements.insertAdjacentHTML('afterbegin', qalay);
+  });
+};
+
 const sumAmount = function (obj) {
   let summa = obj.movements.reduce(function (sum, val) {
     return sum + val;
@@ -136,20 +151,64 @@ btnLogin.addEventListener('click', function (e) {
   labelSumInterest.textContent = `${inter(kirganUser)}€`;
 });
 
-const ekrangaChiqarish = function (obj) {
-  containerMovements.innerHTML = '';
-  obj.movements.forEach(function (val, key) {
-    let tekshir = val > 0 ? 'deposit' : 'withdrawal';
-    let qalay = `<div class="movements__row">
-    <div class="movements__type movements__type--${tekshir}">${
-      key + 1
-    } ${tekshir}</div>
-    <div class="movements__date">3 days ago</div>
-    <div class="movements__value">${val}€</div>
-  </div>`;
-    containerMovements.insertAdjacentHTML('afterbegin', qalay);
+let oluvchiUser;
+
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+  let loginName = inputTransferTo.value;
+  let amountSum = Number(inputTransferAmount.value);
+
+  oluvchiUser = accounts.find(function (val) {
+    return val.username === loginName && loginName !== kirganUser.username;
   });
-};
+  inputTransferTo.value = inputTransferAmount.value = '';
+  oluvchiUser.movements.push(amountSum);
+  kirganUser.movements.push(-amountSum);
+  ekrangaChiqarish(kirganUser);
+  labelSumOut.textContent = `${summaryOut(kirganUser)}€`;
+  labelBalance.textContent = sumAmount(kirganUser) + '€';
+});
+
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+  let giveSum = Number(inputLoanAmount.value);
+  inputLoanAmount.value = '';
+  kirganUser.movements.push(giveSum);
+  ekrangaChiqarish(kirganUser);
+  labelBalance.textContent = sumAmount(kirganUser) + '€';
+  labelSumIn.textContent = `${summary(kirganUser)}€`;
+  labelSumInterest.textContent = `${inter(kirganUser)}€`;
+});
+let findUserKey;
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+  let userName = inputCloseUsername.value;
+  let userPin = Number(inputClosePin.value);
+  inputClosePin.value = inputCloseUsername.value = '';
+  if (userName === kirganUser.username && userPin === kirganUser.pin) {
+    let index = accounts.indexOf(kirganUser);
+    containerApp.style.opacity = '0';
+    accounts.splice(index, 1);
+  }
+});
+
+btnSort.addEventListener('click', function (e) {
+  let arr = [];
+  kirganUser.movements.forEach(function (val) {
+    if (val > 0) {
+      arr.push(val);
+    } else {
+      arr.unshift(val);
+    }
+  });
+  kirganUser.movements = [...arr];
+
+  ekrangaChiqarish(kirganUser);
+  labelBalance.textContent = sumAmount(kirganUser) + '€';
+  labelSumIn.textContent = `${summary(kirganUser)}€`;
+  labelSumOut.textContent = `${summaryOut(kirganUser)}€`;
+  labelSumInterest.textContent = `${inter(kirganUser)}€`;
+});
 
 // LECTURES
 
