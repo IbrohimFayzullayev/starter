@@ -124,6 +124,15 @@ const inter = function (obj) {
   let inter = summary(obj) / 100;
   return inter;
 };
+
+const all = function (kirganUser) {
+  ekrangaChiqarish(kirganUser);
+  labelBalance.textContent = sumAmount(kirganUser) + '€';
+  labelSumIn.textContent = `${summary(kirganUser)}€`;
+  labelSumOut.textContent = `${summaryOut(kirganUser)}€`;
+  labelSumInterest.textContent = `${inter(kirganUser)}€`;
+};
+
 let kirganUser;
 
 btnLogin.addEventListener('click', function (e) {
@@ -144,11 +153,7 @@ btnLogin.addEventListener('click', function (e) {
     containerApp.style.opacity = '0';
   }
   inputLoginUsername.value = inputLoginPin.value = '';
-  ekrangaChiqarish(kirganUser);
-  labelBalance.textContent = sumAmount(kirganUser) + '€';
-  labelSumIn.textContent = `${summary(kirganUser)}€`;
-  labelSumOut.textContent = `${summaryOut(kirganUser)}€`;
-  labelSumInterest.textContent = `${inter(kirganUser)}€`;
+  all(kirganUser);
 });
 
 let oluvchiUser;
@@ -162,11 +167,17 @@ btnTransfer.addEventListener('click', function (e) {
     return val.username === loginName && loginName !== kirganUser.username;
   });
   inputTransferTo.value = inputTransferAmount.value = '';
-  oluvchiUser.movements.push(amountSum);
-  kirganUser.movements.push(-amountSum);
-  ekrangaChiqarish(kirganUser);
-  labelSumOut.textContent = `${summaryOut(kirganUser)}€`;
-  labelBalance.textContent = sumAmount(kirganUser) + '€';
+  if (
+    amountSum > 0 &&
+    amountSum < sumAmount(kirganUser) &&
+    oluvchiUser.username !== kirganUser.username
+  ) {
+    oluvchiUser.movements.push(amountSum);
+    kirganUser.movements.push(-amountSum);
+    all(kirganUser);
+  } else {
+    alert('Login yoki pinkod xato bolishi mumkin');
+  }
 });
 
 btnLoan.addEventListener('click', function (e) {
@@ -174,12 +185,11 @@ btnLoan.addEventListener('click', function (e) {
   let giveSum = Number(inputLoanAmount.value);
   inputLoanAmount.value = '';
   labelBalance.textContent = sumAmount(kirganUser) + '€';
-  if (giveSum < Number(sumAmount(kirganUser)) * 0.1) {
+  if (giveSum < Number(sumAmount(kirganUser)) * 0.1 && giveSum > 0) {
     kirganUser.movements.push(giveSum);
-    ekrangaChiqarish(kirganUser);
-    labelSumIn.textContent = `${summary(kirganUser)}€`;
-    labelSumInterest.textContent = `${inter(kirganUser)}€`;
-    labelBalance.textContent = sumAmount(kirganUser) + '€';
+    all(kirganUser);
+  } else {
+    alert('siz bunday summa qarzga ololmaysiz');
   }
 });
 let findUserKey;
@@ -193,6 +203,8 @@ btnClose.addEventListener('click', function (e) {
     containerApp.style.opacity = '0';
     accounts.splice(index, 1);
     labelWelcome.textContent = `Log in to get started`;
+  } else {
+    alert('Login yoki pinkod xato bolishi mumkin');
   }
 });
 
@@ -207,11 +219,7 @@ btnSort.addEventListener('click', function (e) {
   });
   kirganUser.movements = [...arr];
 
-  ekrangaChiqarish(kirganUser);
-  labelBalance.textContent = sumAmount(kirganUser) + '€';
-  labelSumIn.textContent = `${summary(kirganUser)}€`;
-  labelSumOut.textContent = `${summaryOut(kirganUser)}€`;
-  labelSumInterest.textContent = `${inter(kirganUser)}€`;
+  all(kirganUser);
 });
 
 // LECTURES
