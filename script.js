@@ -173,9 +173,13 @@ btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
   let giveSum = Number(inputLoanAmount.value);
   inputLoanAmount.value = '';
-  kirganUser.movements.push(giveSum);
-  ekrangaChiqarish(kirganUser);
   labelBalance.textContent = sumAmount(kirganUser) + '€';
+  if (giveSum < sumAmount / 10) {
+    kirganUser.movements.push(giveSum);
+  }
+
+  ekrangaChiqarish(kirganUser);
+
   labelSumIn.textContent = `${summary(kirganUser)}€`;
   labelSumInterest.textContent = `${inter(kirganUser)}€`;
 });
@@ -189,6 +193,7 @@ btnClose.addEventListener('click', function (e) {
     let index = accounts.indexOf(kirganUser);
     containerApp.style.opacity = '0';
     accounts.splice(index, 1);
+    labelWelcome.textContent = `Log in to get started`;
   }
 });
 
