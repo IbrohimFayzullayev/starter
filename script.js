@@ -174,14 +174,13 @@ btnLoan.addEventListener('click', function (e) {
   let giveSum = Number(inputLoanAmount.value);
   inputLoanAmount.value = '';
   labelBalance.textContent = sumAmount(kirganUser) + '€';
-  if (giveSum < sumAmount / 10) {
+  if (giveSum < Number(sumAmount(kirganUser)) * 0.1) {
     kirganUser.movements.push(giveSum);
+    ekrangaChiqarish(kirganUser);
+    labelSumIn.textContent = `${summary(kirganUser)}€`;
+    labelSumInterest.textContent = `${inter(kirganUser)}€`;
+    labelBalance.textContent = sumAmount(kirganUser) + '€';
   }
-
-  ekrangaChiqarish(kirganUser);
-
-  labelSumIn.textContent = `${summary(kirganUser)}€`;
-  labelSumInterest.textContent = `${inter(kirganUser)}€`;
 });
 let findUserKey;
 btnClose.addEventListener('click', function (e) {
