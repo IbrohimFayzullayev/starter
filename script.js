@@ -207,21 +207,56 @@ btnClose.addEventListener('click', function (e) {
     alert('Login yoki pinkod xato bolishi mumkin');
   }
 });
-
+let checker = 1;
 btnSort.addEventListener('click', function (e) {
-  let arr = [];
-  kirganUser.movements.forEach(function (val) {
-    if (val > 0) {
-      arr.push(val);
-    } else {
-      arr.unshift(val);
-    }
-  });
-  kirganUser.movements = [...arr];
-
-  all(kirganUser);
+  e.preventDefault();
+  if (checker) {
+    movements = [...kirganUser.movements];
+    kirganUser.movements.sort((a, b) => a - b);
+    checker = 0;
+    ekrangaChiqarish(kirganUser);
+  } else {
+    kirganUser.movements = [...movements];
+    checker = 1;
+    ekrangaChiqarish(kirganUser);
+  }
 });
 
+function timerEnd() {
+  if (labelTimer.textContent === `00:00`) {
+    containerApp.style.opacity = '0';
+    timerLand();
+  }
+  // timerLand();
+}
+let vaqt = 4;
+let sekund = 59;
+function timerLand() {
+  sekund = sekund - 1;
+  if (sekund == 0) {
+    vaqt = vaqt - 1;
+    sekund = 59;
+  }
+  if (sekund < 10) {
+    sekund = `0${sekund}`;
+  }
+
+  labelTimer.textContent = `0${vaqt}:${sekund}`;
+  timerEnd();
+}
+
+setInterval(timerLand, 1000);
+
+function dateLand() {
+  let soat = String(new Date().getHours()).padStart(2, 0);
+  let minut = String(new Date().getMinutes()).padStart(2, 0);
+  let sek = String(new Date().getSeconds()).padStart(2, 0);
+  let kun = String(new Date().getDate()).padStart(2, 0);
+  let oy = String(new Date().getMonth() + 1).padStart(2, 0);
+  let yil = String(new Date().getFullYear());
+  labelDate.textContent = `${kun}/${oy}/${yil} ${soat}:${minut}:${sek}`;
+}
+setInterval(dateLand, 1000);
 // LECTURES
 
 const currencies = new Map([
@@ -230,6 +265,6 @@ const currencies = new Map([
   ['GBP', 'Pound sterling'],
 ]);
 
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+let movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
