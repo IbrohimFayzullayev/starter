@@ -223,11 +223,10 @@ btnSort.addEventListener('click', function (e) {
 });
 
 function timerEnd() {
-  if (labelTimer.textContent === `00:00`) {
+  if (labelTimer.textContent === '04:30') {
     containerApp.style.opacity = '0';
     timerLand();
   }
-  // timerLand();
 }
 let vaqt = 4;
 let sekund = 59;
@@ -257,6 +256,42 @@ function dateLand() {
   labelDate.textContent = `${kun}/${oy}/${yil} ${soat}:${minut}:${sek}`;
 }
 setInterval(dateLand, 1000);
+
+// labelBalance.addEventListener('click', function (e) {
+//   e.preventDefault();
+//   let sor = Array.from(
+//     document.querySelectorAll('.movements__value'),
+//     function (val, key) {
+//       return Number(val.textContent.slice(0, -1));
+//     }
+//   );
+//   console.log(sor);
+// });
+let rang = 1;
+labelBalance.addEventListener('click', function () {
+  if (rang) {
+    [...document.querySelectorAll('.movements__row')].forEach(function (
+      val,
+      key
+    ) {
+      if (key % 2 == 0) {
+        val.style.backgroundColor = 'blue';
+      } else {
+        val.style.backgroundColor = 'green';
+      }
+    });
+    rang = 0;
+  } else {
+    [...document.querySelectorAll('.movements__row')].forEach(function (
+      val,
+      key
+    ) {
+      val.style.backgroundColor = 'white';
+    });
+    rang = 1;
+  }
+});
+
 // LECTURES
 
 const currencies = new Map([
