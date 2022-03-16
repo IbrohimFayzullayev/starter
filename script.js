@@ -223,7 +223,7 @@ btnSort.addEventListener('click', function (e) {
 });
 
 function timerEnd() {
-  if (labelTimer.textContent === '04:30') {
+  if (labelTimer.textContent === '00:00') {
     containerApp.style.opacity = '0';
     timerLand();
   }
