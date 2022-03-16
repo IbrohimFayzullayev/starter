@@ -3,13 +3,23 @@
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // BANKIST APP
-
+// console.log(new Date().toISOString());
 // Data
 const account1 = {
   owner: 'Jonas Schmedtmann',
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
   interestRate: 1.2, // %
   pin: 1111,
+  movementsDate: [
+    '2022-03-9T11:28:33.503Z',
+    '2022-03-10T11:28:33.503Z',
+    '2022-03-11T11:28:33.503Z',
+    '2022-03-12T11:28:33.503Z',
+    '2022-03-13T11:28:33.503Z',
+    '2022-03-14T11:28:33.503Z',
+    '2022-03-15T11:28:33.503Z',
+    '2022-03-16T11:28:33.503Z',
+  ],
 };
 
 const account2 = {
@@ -78,12 +88,13 @@ const inputClosePin = document.querySelector('.form__input--pin');
 const ekrangaChiqarish = function (obj) {
   containerMovements.innerHTML = '';
   obj.movements.forEach(function (val, key) {
+    let sanalar = new Date(obj.movementsDate[key]);
     let tekshir = val > 0 ? 'deposit' : 'withdrawal';
     let qalay = `<div class="movements__row">
     <div class="movements__type movements__type--${tekshir}">${
       key + 1
     } ${tekshir}</div>
-    <div class="movements__date">3 days ago</div>
+    <div class="movements__date">${obj.movementsDate[key]}</div>
     <div class="movements__value">${val}€</div>
   </div>`;
     containerMovements.insertAdjacentHTML('afterbegin', qalay);
@@ -247,26 +258,29 @@ function timerLand() {
 setInterval(timerLand, 1000);
 
 function dateLand() {
-  let soat = String(new Date().getHours()).padStart(2, 0);
-  let minut = String(new Date().getMinutes()).padStart(2, 0);
-  let sek = String(new Date().getSeconds()).padStart(2, 0);
-  let kun = String(new Date().getDate()).padStart(2, 0);
-  let oy = String(new Date().getMonth() + 1).padStart(2, 0);
-  let yil = String(new Date().getFullYear());
-  labelDate.textContent = `${kun}/${oy}/${yil} ${soat}:${minut}:${sek}`;
+  // let soat = String(new Date().getHours()).padStart(2, 0);
+  // let minut = String(new Date().getMinutes()).padStart(2, 0);
+  // let sek = String(new Date().getSeconds()).padStart(2, 0);
+  // let kun = String(new Date().getDate()).padStart(2, 0);
+  // let oy = String(new Date().getMonth() + 1).padStart(2, 0);
+  // let yil = String(new Date().getFullYear());
+  // labelDate.textContent = `${kun}/${oy}/${yil} ${soat}:${minut}:${sek}`;
+  let hozir = new Date();
+  let options = {
+    day: 'numeric',
+    year: 'numeric',
+    month: 'long',
+    weekday: 'long',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+  };
+  let nav = navigator.language;
+  let date = new Intl.DateTimeFormat('nav', options).format(hozir);
+  labelDate.textContent = date;
 }
 setInterval(dateLand, 1000);
 
-// labelBalance.addEventListener('click', function (e) {
-//   e.preventDefault();
-//   let sor = Array.from(
-//     document.querySelectorAll('.movements__value'),
-//     function (val, key) {
-//       return Number(val.textContent.slice(0, -1));
-//     }
-//   );
-//   console.log(sor);
-// });
 let rang = 1;
 labelBalance.addEventListener('click', function () {
   if (rang) {
